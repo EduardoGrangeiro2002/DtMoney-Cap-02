@@ -16,6 +16,7 @@ createServer({
           title: "Salário",
           category: 'DevBack-End-NodeJS',
           number: 3500,
+          type: 'deposit',
           createdAt: new Date()
         },
         {
@@ -23,6 +24,7 @@ createServer({
           title: "Free-lancer",
           category: 'DevBack-End-NodeJS',
           number: 9000,
+          type: 'deposit',
           createdAt: new Date()
         }
       ]

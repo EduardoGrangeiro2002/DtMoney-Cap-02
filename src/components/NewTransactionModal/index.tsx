@@ -3,7 +3,7 @@ import Modal from "react-modal"
 import closeImg from "../../assets/close.svg"
 import incomeImg from "../../assets/income.svg"
 import outcomeImg from "../../assets/outcome.svg"
-import { api } from "../../services/api"
+import { useTransaction } from "../../hooks/useTransaction"
 import { Container, RadioBox, TransactionTypeModal } from "./styles"
 
 type NewTransactionModalProps = {
@@ -13,6 +13,8 @@ type NewTransactionModalProps = {
 
 
 export function NewTransactionModal({isOpen, onRequestClose}: NewTransactionModalProps) {
+  const { createTransaction } = useTransaction()
+
   const [type, setType] = useState('deposit');
   const [title, setTitle] = useState('');
   const [number, setNumber] = useState(0);
@@ -20,15 +22,20 @@ export function NewTransactionModal({isOpen, onRequestClose}: NewTransactionModa
 
 
   
-  const handleCreateNewTransaction = (event: FormEvent) => {
+  const  handleCreateNewTransaction = async (event: FormEvent) => {
     event.preventDefault()
-    const data = {
-        type,
-        category,
-        number,
-        title
-    }
-    api.post('/transactions', data)
+    await createTransaction({
+      title,
+      type, 
+      category,
+      number
+    })
+
+    setTitle('')
+    setType('deposit')
+    setNumber(0)
+    setCategory('')
+    onRequestClose()
   } 
 
   return(
@@ -54,7 +61,7 @@ export function NewTransactionModal({isOpen, onRequestClose}: NewTransactionModa
             value={number}
             onChange={event => setNumber(Number(event.target.value))} 
             />
-/
+
             <TransactionTypeModal>
 
               <RadioBox  type="button" onClick={() => setType('deposit')} isActive={type === 'deposit'} activeColor="green">
